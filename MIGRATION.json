@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-10",
+  "sources": [
+    {
+      "repository": "DungeonAsoy",
+      "url": "https://github.com/rasyaaudreabramantyawijaya/DungeonAsoy",
+      "default_branch": "main",
+      "commit": "e4e8ceeb92c7055d2b8ed6a7b4269b18ecb6aff2",
+      "tree": "3626f62ffc44571819e497c021692be095aaac7b"
+    },
+    {
+      "repository": "autonomous-delivery-bot",
+      "url": "https://github.com/rasyaaudreabramantyawijaya/autonomous-delivery-bot",
+      "default_branch": "main",
+      "commit": "82c58e37a9370bdab54c4eb48b74877be9f0d87f",
+      "tree": "8be6a607a10ab18f16f35f97b83dd2696accbe35"
+    },
+    {
+      "repository": "Maze-Runner-Game",
+      "url": "https://github.com/rasyaaudreabramantyawijaya/Maze-Runner-Game",
+      "default_branch": "main",
+      "commit": "b422693fca473a4e5b946c3ce50d648e3ba204bc",
+      "tree": "334c97b0785fd57b382e868d57fc8deb17d4738f"
+    },
+    {
+      "repository": "My-project-2026-09-16_09-14-04",
+      "url": "https://github.com/rasyaaudreabramantyawijaya/My-project-2026-09-16_09-14-04",
+      "default_branch": "main",
+      "commit": "d67319d344409862556f46320e65b85008ad6844",
+      "tree": "661531ac1dc3deedc327828708a7e04c05624baa"
+    },
+    {
+      "repository": "EnemyDetection-G",
+      "url": "https://github.com/rasyaaudreabramantyawijaya/EnemyDetection-G",
+      "default_branch": "main",
+      "commit": "454c01fb438558a8c113104929b85cfdd867412a",
+      "tree": "e784c27016ab58872131a708ee4b1630271a4e62"
+    }
+  ]
+}
