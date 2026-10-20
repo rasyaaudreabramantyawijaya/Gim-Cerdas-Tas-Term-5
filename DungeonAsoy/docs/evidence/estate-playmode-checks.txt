@@ -1,0 +1,19 @@
+INFO initial: paused=False scale=1 frames=40 focus=True player=(0.00, 0.10, -25.00) controller=True complete=False dialogue=False keyboard=True
+PASS player remains grounded after three seconds of actual gravity
+PASS terrain collider exists
+PASS health event updates visible HUD at runtime
+PASS NPC opens visible dialogue and pauses gameplay
+PASS closing dialogue restores time
+PASS checkpoint activation restores health and death restart respawns there
+PASS CharacterController cannot cross mansion front wall
+PASS courtyard enemy uses ranged mode
+INFO input: paused=False scale=1 speed=4 keyboardCurrent=True W=False
+PASS W input moves player across terrain
+PASS walking input drives leg swing animation
+PASS archer fires projectile and damages stationary player
+PASS arrow stops at mansion wall instead of damaging player behind it
+PASS gate stays locked before artifact
+PASS artifact pickup is idempotent and hides visual
+PASS NPC dialogue changes after collecting the artifact
+PASS artifact unlocks gate without prematurely ending the run
+PASS crossing the unlocked exit completes run
