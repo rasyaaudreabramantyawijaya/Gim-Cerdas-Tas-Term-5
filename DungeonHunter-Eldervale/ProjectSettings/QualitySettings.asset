@@ -1,4 +1,3 @@
-%UNITY 7.0
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!47 &1
@@ -331,6 +330,7 @@ QualitySettings:
     EmbeddedLinux: 5
     GameCoreScarlett: 5
     GameCoreXboxOne: 5
+    Kepler: 5
     LinuxHeadlessSimulation: 5
     Nintendo Switch: 5
     Nintendo Switch 2: 5

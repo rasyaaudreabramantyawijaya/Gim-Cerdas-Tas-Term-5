@@ -62,18 +62,16 @@ public sealed class HumanoidView : MonoBehaviour
         }
 
         // --- Body Textures & Lighting ---
-        Texture2D baseTex=null,normTex=null,roughTex=null;
+        Texture2D baseTex=null,normTex=null;
         if(character==1)
         {
             baseTex=Resources.Load<Texture2D>("Humanoid/T_Superhero_Female_Dark_BaseColor");
             normTex=Resources.Load<Texture2D>("Humanoid/T_Superhero_Female_Normal");
-            roughTex=Resources.Load<Texture2D>("Humanoid/T_Superhero_Female_Roughness");
         }
         else
         {
             baseTex=Resources.Load<Texture2D>(character==2?"Humanoid/T_Superhero_Male_Ligh":"Humanoid/T_Superhero_Male_Dark");
             normTex=Resources.Load<Texture2D>("Humanoid/T_Superhero_Male_Normal");
-            roughTex=Resources.Load<Texture2D>("Humanoid/T_Superhero_Male_Roughness");
         }
 
         foreach(var renderer in body.GetComponentsInChildren<Renderer>())
@@ -84,38 +82,48 @@ public sealed class HumanoidView : MonoBehaviour
                 material.shader=Shader.Find("Universal Render Pipeline/Lit");
                 if(baseTex!=null){material.mainTexture=baseTex;material.SetTexture("_BaseMap",baseTex);}
                 if(normTex!=null){material.SetTexture("_BumpMap",normTex);material.EnableKeyword("_NORMALMAP");}
-                if(roughTex!=null){material.SetTexture("_MetallicGlossMap",roughTex);}
-                material.color=enemy?new Color(.85f,.65f,.65f):Color.white;
-                material.SetFloat("_Smoothness",.35f);
-                // Subtle ambient lift so character detail is crisp and never crushed into pitch black shadows
-                material.EnableKeyword("_EMISSION");
-                material.SetColor("_EmissionColor",new Color(.11f,.11f,.12f));
+                material.color=enemy?new Color(.85f,.65f,.65f):character==2?new Color(.74f,.74f,.74f):Color.white;
+                // The source texture stores roughness, while URP's metallic map expects metallic in R
+                // and smoothness in A. Treating roughness as metallic made skin glossy and blew out faces.
+                material.SetTexture("_MetallicGlossMap",null);
+                material.DisableKeyword("_METALLICSPECGLOSSMAP");
+                material.SetFloat("_Metallic",0f);
+                material.SetFloat("_Smoothness",character==2?.12f:.2f);
+                material.DisableKeyword("_EMISSION");
+                material.SetColor("_EmissionColor",Color.black);
             }
         }
 
-        // --- Hero Fill Light (ensures hero is always readable and radiant) ---
+        // --- Gentle character fill to retain face detail without a hard hot spot ---
         if(!enemy)
         {
-            var heroLight=new GameObject("Hero Warm Rim Light").AddComponent<Light>();
+            var heroLight=new GameObject("Character Soft Fill").AddComponent<Light>();
             heroLight.transform.SetParent(transform,false);
-            heroLight.transform.localPosition=new Vector3(0,1.4f,.45f);
+            heroLight.transform.localPosition=new Vector3(0,2.1f,1.1f);
             heroLight.type=LightType.Point;
-            heroLight.range=5.5f;
-            heroLight.intensity=.85f;
-            heroLight.color=new Color(1f,.95f,.88f);
+            heroLight.range=3.8f;
+            heroLight.intensity=character==2?.34f:.08f;
+            heroLight.color=character==2?Color.white:new Color(.86f,.92f,1f);
             heroLight.shadows=LightShadows.None;
         }
 
         // --- Flowing Cape ---
         var cloak=new GameObject("Wind Cape");
         var chest=animator.isHuman?animator.GetBoneTransform(HumanBodyBones.Chest):null;
+        var leftShoulder=animator.isHuman?animator.GetBoneTransform(HumanBodyBones.LeftShoulder):null;
+        var rightShoulder=animator.isHuman?animator.GetBoneTransform(HumanBodyBones.RightShoulder):null;
+        if(leftShoulder==null&&animator.isHuman)leftShoulder=animator.GetBoneTransform(HumanBodyBones.LeftUpperArm);
+        if(rightShoulder==null&&animator.isHuman)rightShoulder=animator.GetBoneTransform(HumanBodyBones.RightUpperArm);
         cloak.transform.SetParent(transform,false);
         cloak.transform.position=transform.TransformPoint(new Vector3(0,1.46f,-.2f));cloak.transform.rotation=transform.rotation;
         var mat=new Material(Shader.Find("Universal Render Pipeline/Lit"));
         mat.color=enemy?new Color(.35f,.12f,.12f):character==1?new Color(.12f,.32f,.28f):character==2?new Color(.42f,.32f,.18f):new Color(.14f,.22f,.35f);
         mat.SetFloat("_Cull",0);mat.SetFloat("_Smoothness",.15f);
         RuntimeResources.Own(cloak,mat);
-        var flowingCape=cloak.AddComponent<FlowingCape>();flowingCape.Shoulder=chest;flowingCape.Avatar=transform;flowingCape.Build(mat);
+        var flowingCape=cloak.AddComponent<FlowingCape>();
+        flowingCape.Shoulder=chest;flowingCape.LeftShoulder=leftShoulder;flowingCape.RightShoulder=rightShoulder;
+        flowingCape.Hips=animator.isHuman?animator.GetBoneTransform(HumanBodyBones.Hips):null;flowingCape.Head=head;
+        flowingCape.Avatar=transform;flowingCape.Build(mat);
 
         // --- Fitted Adventurer Accents ---
         var outfit=new GameObject("Adventurer clothing");outfit.transform.SetParent(transform,false);
@@ -274,6 +282,6 @@ public sealed class HumanoidView : MonoBehaviour
             grimoire.transform.localRotation = Quaternion.Euler(18f, Mathf.Sin(Time.time * 2f) * 14f, -currentRoll * .6f);
         }
 
-        if(Time.time>=actionUntil) Play(Speed>.1f?"Walk":"Idle");
+        if(Time.time>=actionUntil) Play(Speed>5f?"Run":Speed>.1f?"Walk":"Idle");
     }
 }

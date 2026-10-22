@@ -20,6 +20,26 @@ public static class EldervaleSceneBuilder
         if(type!=null){var window=EditorWindow.GetWindow(type);window.Show();var gizmos=type.GetProperty("drawGizmos",System.Reflection.BindingFlags.Public|System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance);if(gizmos!=null&&gizmos.CanWrite)gizmos.SetValue(window,false);}
         EldervaleEditorControl.SchedulePreview();
     }
+    [MenuItem("Eldervale/Configure build scene list")]
+    public static void ConfigureBuildSceneList()
+    {
+        var names=new[]{"Frontend","EldervaleOverworld","AshenCrypt","WhisperingGrotto","VeyrSanctum"};
+        var scenes=names.Select(name=>"Assets/Eldervale/Scenes/"+name+".unity").ToArray();
+        foreach(var scene in scenes)if(!File.Exists(scene))throw new FileNotFoundException("Required game scene is missing.",scene);
+        EditorBuildSettings.scenes=scenes.Select(path=>new EditorBuildSettingsScene(path,true)).ToArray();
+        AssetDatabase.SaveAssets();
+        Debug.Log("ELDERVALE_BUILD_SCENES_CONFIGURED "+string.Join(", ",names));
+    }
+    [MenuItem("Eldervale/Configure URP")]
+    public static void ConfigureRenderPipeline()
+    {
+        var pipeline=AssetDatabase.LoadAssetAtPath<RenderPipelineAsset>("Assets/Settings/PC_RPAsset.asset");
+        if(pipeline==null)throw new FileNotFoundException("The PC URP asset is missing.","Assets/Settings/PC_RPAsset.asset");
+        GraphicsSettings.defaultRenderPipeline=pipeline;
+        QualitySettings.renderPipeline=pipeline;
+        AssetDatabase.SaveAssets();
+        Debug.Log("ELDERVALE_URP_CONFIGURED "+AssetDatabase.GetAssetPath(pipeline));
+    }
     [MenuItem("Eldervale/Build project scenes")]
     public static void Build()
     {
@@ -78,7 +98,7 @@ public static class EldervaleSceneBuilder
         var clips=AssetDatabase.LoadAllAssetsAtPath("Assets/Eldervale/Resources/Animations/UAL1_Standard.fbx").OfType<AnimationClip>().Where(c=>!c.name.StartsWith("__preview__")).ToArray();
         Debug.Log("ELDERVALE_CLIPS "+string.Join(", ",clips.Select(c=>c.name)));
         var machine=controller.layers[0].stateMachine;
-        foreach(var pair in new[]{new[]{"Idle","Idle_Loop"},new[]{"Walk","Walk_Loop"},new[]{"Jump","Jump_Start"},new[]{"Attack","Sword_Attack"},new[]{"Cast","Spell_Simple_Shoot"},new[]{"Dead","Death01"}})
+        foreach(var pair in new[]{new[]{"Idle","Idle_Loop"},new[]{"Walk","Walk_Loop"},new[]{"Run","Sprint_Loop"},new[]{"Jump","Jump_Start"},new[]{"Attack","Sword_Attack"},new[]{"Cast","Spell_Simple_Shoot"},new[]{"Dead","Death01"}})
         {
             var state=machine.states.Select(x=>x.state).FirstOrDefault(s=>s.name==pair[0])??machine.AddState(pair[0]);
             var clip=clips.FirstOrDefault(c=>c.name.EndsWith("|"+pair[1],StringComparison.OrdinalIgnoreCase))

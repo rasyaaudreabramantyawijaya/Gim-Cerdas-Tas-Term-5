@@ -14,7 +14,7 @@ public sealed class WorldBuilder : MonoBehaviour
         stone=Material("Stone",new Color(.6f,.58f,.51f),"stone_brick_wall_001");
         wood=Material("Timber",new Color(.27f,.18f,.12f));
         wood.mainTexture=Resources.Load<Texture2D>("Nature/NormalTree_Bark");wood.mainTextureScale=new Vector2(1,3);
-        roof=Material("Slate roofs",new Color(.22f,.29f,.32f));
+        roof=Material("Slate roofs",new Color(.36f,.39f,.37f));
         path=Material("Path",new Color(.38f,.34f,.27f),"rocky_terrain");
         grass=Material("Grass",new Color(.21f,.35f,.18f));
         metal=Material("Aged gold",new Color(.65f,.53f,.31f));metal.SetFloat("_Metallic",.7f);metal.SetFloat("_Smoothness",.7f);
@@ -57,6 +57,8 @@ public sealed class WorldBuilder : MonoBehaviour
     void Lighting(bool outside)
     {
         var light=new GameObject("Sun").AddComponent<Light>();light.type=LightType.Directional;light.intensity=outside?1.45f:.25f;
+        // Portraits use their own studio lights on layer 29; avoid stacking the world sun on them.
+        light.cullingMask&=~(1<<29);
         light.color=new Color(1,.9f,.75f);light.transform.rotation=Quaternion.Euler(38,-42,0);light.shadows=LightShadows.Soft;light.shadowStrength=0.65f;RenderSettings.sun=light;
         RenderSettings.ambientMode=UnityEngine.Rendering.AmbientMode.Trilight;
         RenderSettings.ambientSkyColor=outside?new Color(.68f,.78f,.88f):new Color(.35f,.42f,.45f);
@@ -84,12 +86,16 @@ public sealed class WorldBuilder : MonoBehaviour
         {
             float wx=x/128f*200-100,wz=z/128f*200-100;
             float edge=Mathf.Max(Mathf.Abs(wx),Mathf.Abs(wz));
-            heights[z,x]=Mathf.SmoothStep(0,.7f,Mathf.InverseLerp(73,100,edge))*(.55f+Mathf.PerlinNoise(x*.1f,z*.1f)*.45f);
+            float originalHeight=Mathf.SmoothStep(0,.7f,Mathf.InverseLerp(73,100,edge))*(.55f+Mathf.PerlinNoise(x*.1f,z*.1f)*.45f)*24f;
+            float worldHeight=originalHeight+ValleyRiver.GroundOffsetAt(wx,wz);
+            // A one metre terrain offset preserves every existing ground height
+            // while giving the riverbed room to sit below the surrounding land.
+            heights[z,x]=Mathf.Clamp01((worldHeight+1f)/24f);
         }
         data.SetHeights(0,0,heights);
         var tl=new TerrainLayer{diffuseTexture=Resources.Load<Texture2D>("Textures/forest_ground_04/forest_ground_04_diff_1k"),tileSize=new Vector2(7,7),diffuseRemapMin=Vector4.zero,diffuseRemapMax=new Vector4(.62f,.88f,.51f,1)};
         data.terrainLayers=new[]{tl};
-        var t=UnityEngine.Terrain.CreateTerrainGameObject(data);t.name="Eldervale Hills";t.transform.SetParent(environment);t.transform.position=new Vector3(-100,0,-100);
+        var t=UnityEngine.Terrain.CreateTerrainGameObject(data);t.name="Eldervale Hills";t.transform.SetParent(environment);t.transform.position=new Vector3(-100,-1,-100);
         var terrain=t.GetComponent<UnityEngine.Terrain>();terrain.materialTemplate=Resources.Load<Material>("Scenery/RetainedTerrain");terrain.drawInstanced=false;
     }
     void Overworld()
@@ -109,13 +115,16 @@ public sealed class WorldBuilder : MonoBehaviour
         {
             float x=Random.Range(-94f,94f),z=Random.Range(-94f,94f);
             if(Mathf.Abs(x)<38&&z<12 || Mathf.Abs(z)<9 || Mathf.Abs(x)<10)continue;
+            var treeSite=new Vector3(x,0,z);
+            if(ValleyRiver.IsNearWater(treeSite,5f)||IsCoastalWater(treeSite,3f))continue;
             Tree(new Vector3(x,0,z),Random.Range(3.8f,7));
         }
         for(int i=0;i<240;i++)
         {
             Vector3 p=new Vector3(Random.Range(-85,85),0,Random.Range(-80,80));
             if(Mathf.Abs(p.x)<34&&p.z<12||Mathf.Abs(p.z)<6||Mathf.Abs(p.x)<6)continue;
-            p.y=UnityEngine.Terrain.activeTerrain.SampleHeight(p);
+            if(ValleyRiver.IsNearWater(p,.35f)||IsCoastalWater(p,.35f))continue;
+            p.y=TerrainWorldHeight(p);
             if(!NatureAssets.Grass(environment,p,.65f)){var tuft=Box("Wind grass",p+Vector3.up*.25f,new Vector3(.12f,.5f,.5f),grass,false);tuft.AddComponent<WindMotion>();}
         }
         var merchant=Box("Market canopy",new Vector3(9,3,-53),new Vector3(5,.2f,4),roof);
@@ -130,7 +139,8 @@ public sealed class WorldBuilder : MonoBehaviour
         for(int i=0;i<4;i++)Box("Fountain rim",new Vector3(i<2?(i==0?-2.6f:2.6f):0,.28f,i<2?-34:(i==2?-36.1f:-31.9f)),new Vector3(i<2?.25f:5.4f,.5f,i<2?4.5f:.25f),stone);
 
         // Landmark Features
-        ValleyRiver.Build(environment, stone, wood, stone);
+        var riverRock=Material("River rock",new Color(.62f,.62f,.56f),"mossy_rock");
+        ValleyRiver.Build(environment, stone, wood, riverRock);
         ValleyRailway.Build(environment, wood, metal, stone);
         ValleyFarmland.Build(environment, wood, stone, path, grass);
 
@@ -246,13 +256,78 @@ public sealed class WorldBuilder : MonoBehaviour
         Box("Castle gate left",p+new Vector3(-10,3,-13),new Vector3(10,6,1),stone);
         Box("Castle gate right",p+new Vector3(10,3,-13),new Vector3(10,6,1),stone);
         Box("Castle arch",p+new Vector3(0,6,-13),new Vector3(12,1,1.2f),stone);
-        for(int x=-1;x<=1;x+=2)for(int z=-1;z<=1;z+=2)
+
+        // Crenellations make the curtain walls read as a fortress from the approach.
+        for(int i=0;i<13;i++)
         {
-            var t=p+new Vector3(x*15,0,z*13);
-            Box("Castle tower",t+Vector3.up*4,new Vector3(5,8,5),stone);
-            for(int j=0;j<4;j++)Box("Battlement",t+new Vector3(j%2==0?-2:2,8.5f,j<2?-2:2),Vector3.one,stone);
+            float offset=-13f+i*(26f/12f);
+            Box("Castle north battlement",p+new Vector3(offset,6.55f,13),new Vector3(1.05f,1.1f,.9f),stone);
+            if(i<4)
+            {
+                float gateOffset=-13f+i*2.2f;
+                Box("Castle west gate battlement",p+new Vector3(gateOffset,6.55f,-13),new Vector3(1.05f,1.1f,.9f),stone);
+                Box("Castle east gate battlement",p+new Vector3(-gateOffset,6.55f,-13),new Vector3(1.05f,1.1f,.9f),stone);
+            }
         }
-        Use(UseKind.Talk,0,"Bicara dengan Warden istana",p+new Vector3(0,0,6));
+        for(int i=0;i<11;i++)
+        {
+            float z=-11f+i*2.2f;
+            Box("Castle west battlement",p+new Vector3(-15,6.55f,z),new Vector3(.9f,1.1f,1.05f),stone);
+            Box("Castle east battlement",p+new Vector3(15,6.55f,z),new Vector3(.9f,1.1f,1.05f),stone);
+        }
+
+        // Corner turrets and the taller gatehouse frame the entrance.
+        for(int x=-1;x<=1;x+=2)for(int z=-1;z<=1;z+=2)
+            CastleTower(p+new Vector3(x*15,0,z*13),"Castle corner tower",5.6f,10.5f);
+        CastleTower(p+new Vector3(-5.7f,0,-13),"Castle gatehouse west tower",3.8f,11.5f);
+        CastleTower(p+new Vector3(5.7f,0,-13),"Castle gatehouse east tower",3.8f,11.5f);
+        Box("Castle gatehouse bridge",p+new Vector3(0,8.4f,-13),new Vector3(7.8f,4.4f,4),stone);
+        var banner=Material("Castle banners",new Color(.48f,.12f,.08f));
+        for(int side=-1;side<=1;side+=2)
+        {
+            float x=side*5.7f;
+            Box("Castle gatehouse banner pole",p+new Vector3(x,9.2f,-15.05f),new Vector3(.12f,3.6f,.12f),metal,false);
+            Box("Castle gatehouse banner",p+new Vector3(x,7.5f,-15.08f),new Vector3(1.45f,2.4f,.12f),banner,false);
+        }
+
+        // A roofed keep rises behind the rear curtain wall, visible through the gate.
+        Box("Castle keep foundation",p+new Vector3(0,.4f,9),new Vector3(13,.8f,14),stone);
+        Box("Castle keep",p+new Vector3(0,6.25f,9),new Vector3(11.5f,12.5f,12),stone);
+        Box("Castle keep entrance",p+new Vector3(0,2.05f,2.88f),new Vector3(2.3f,3.9f,.14f),wood,false);
+        for(int side=-1;side<=1;side+=2)
+        {
+            Box("Castle keep doorway pier",p+new Vector3(side*1.42f,2.1f,2.72f),new Vector3(.42f,4.2f,.4f),stone,false);
+            for(int row=0;row<2;row++)
+                Box("Castle keep arrow slit",p+new Vector3(side*3.65f,7.5f+row*2.6f,2.9f),new Vector3(.48f,1.55f,.12f),wood,false);
+        }
+        Box("Castle keep doorway lintel",p+new Vector3(0,4.25f,2.72f),new Vector3(3.2f,.48f,.4f),stone,false);
+        var leftRoof=Box("Castle keep west roof",p+new Vector3(-3.15f,13.35f,9),new Vector3(7.5f,.65f,14),roof,false);
+        leftRoof.transform.rotation=Quaternion.Euler(0,0,35);
+        var rightRoof=Box("Castle keep east roof",p+new Vector3(3.15f,13.35f,9),new Vector3(7.5f,.65f,14),roof,false);
+        rightRoof.transform.rotation=Quaternion.Euler(0,0,-35);
+        Box("Castle keep ridge cap",p+new Vector3(0,15.35f,9),new Vector3(.5f,.45f,14.2f),roof,false);
+        Box("Castle keep flag pole",p+new Vector3(0,17.1f,9),new Vector3(.12f,3.2f,.12f),metal,false);
+        Box("Castle keep flag",p+new Vector3(.8f,17.55f,9),new Vector3(1.55f,1.8f,.12f),banner,false);
+        Use(UseKind.Talk,0,"Bicara dengan Warden istana",p+new Vector3(0,0,1.5f));
+    }
+    void CastleTower(Vector3 p,string name,float width,float height)
+    {
+        Box(name+" footing",p+Vector3.up*.35f,new Vector3(width+1,.7f,width+1),stone);
+        Box(name,p+Vector3.up*(height*.5f),new Vector3(width*.86f,height,width*.86f),stone);
+        Box(name+" crown",p+Vector3.up*(height+.25f),new Vector3(width+.45f,.5f,width+.45f),stone);
+        float edge=(width+.45f)*.46f;
+        float offset=width*.25f;
+        float size=width*.22f;
+        for(int i=-1;i<=1;i++)
+        {
+            Box(name+" merlon",p+new Vector3(i*offset,height+1.05f,edge),new Vector3(size,1.1f,size),stone);
+            Box(name+" merlon",p+new Vector3(i*offset,height+1.05f,-edge),new Vector3(size,1.1f,size),stone);
+            if(i!=-1&&i!=1)
+            {
+                Box(name+" merlon",p+new Vector3(edge,height+1.05f,i*offset),new Vector3(size,1.1f,size),stone);
+                Box(name+" merlon",p+new Vector3(-edge,height+1.05f,i*offset),new Vector3(size,1.1f,size),stone);
+            }
+        }
     }
     void Tower(Vector3 p,int id,bool grand)
     {
@@ -287,9 +362,16 @@ public sealed class WorldBuilder : MonoBehaviour
     }
     void Tree(Vector3 p,float height)
     {
-        float altitude=UnityEngine.Terrain.activeTerrain!=null?UnityEngine.Terrain.activeTerrain.SampleHeight(p):0;
-        ScenicBackdrop.Pine(environment,p+Vector3.up*altitude,height*1.35f,grass,wood);
+        p.y=TerrainWorldHeight(p);
+        ScenicBackdrop.Pine(environment,p,height*1.35f,grass,wood);
     }
+    static float TerrainWorldHeight(Vector3 worldPosition)
+    {
+        var terrain=UnityEngine.Terrain.activeTerrain;
+        return terrain!=null?terrain.transform.position.y+terrain.SampleHeight(worldPosition):0f;
+    }
+    static bool IsCoastalWater(Vector3 p,float margin)
+        =>Mathf.Abs(p.x-89f)<=12.5f+margin&&Mathf.Abs(p.z+38f)<=21.5f+margin;
     void Dungeon()
     {
         var acoustics=new GameObject("Stone chamber acoustics").AddComponent<AudioReverbZone>();

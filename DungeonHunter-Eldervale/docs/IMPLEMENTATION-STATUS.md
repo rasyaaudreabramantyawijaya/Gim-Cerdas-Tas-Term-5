@@ -48,3 +48,38 @@ Perbaikan tambahan: kanopi bertiang dan display dagangan, gable/frame/jendela ru
 Inspeksi gambar menemukan dua cacat yang tidak tercakup tes awal: material pohon ikut dihancurkan bersama scene sebelumnya, dan reset rotasi menimpa sumbu asli FBX sehingga pohon rebah. Cache material kini milik environment setiap scene; rotasi impor dipertahankan. Kedua regresi tercakup pemeriksaan runtime baru dan sudah lulus. Koreksi tiling sempat mengakses properti tekstur yang tidak ada di shader air; hasil gagal disimpan di texture-tiling-red.txt dan diperbaiki dengan pengecekan properti.
 
 Terakhir tercatat 59 PASS / 0 FAIL setelah koreksi tersebut. Pemeriksaan diulang untuk animasi air/angin unscaled di menu, lalu build standalone dan pemeriksaan UI native. Status final harus merujuk hasil build dan capture aplikasi, bukan keberadaan folder output saja.
+
+## Build profile dan scene preview — 22 Oktober 2026
+
+Pada Unity 7000.0.0a11, shared build scene list kosong walau lima scene game tersedia. Daftar Frontend, EldervaleOverworld, AshenCrypt, WhisperingGrotto, dan VeyrSanctum kini dikonfigurasi lewat EditorBuildSettings API; perpindahan ke EldervaleOverworld tidak lagi gagal karena daftar scene. Scene `Untitled` pada screenshot adalah scene default Unity; ia tidak memiliki WorldBuilder, sehingga menampilkan horizon sederhana tanpa scenery judul. Render pipeline PC URP kini ditetapkan melalui GraphicsSettings dan API Editor aktif. Preview Play native menampilkan menu Frontend dengan scenery pegunungan dan air terjun; scene overworld juga ter-render dengan terrain dan karakter. Pemeriksaan mailbox editor menormalkan pemisah path Windows sebelum memilih assembly editor/runtime.
+## Character lighting polish - 22 October 2026
+
+Live preview review of character select found washed-out skin from roughness maps being assigned as URP metallic maps, a close face fill, and portrait lights stacking with the world sun. Character skin is now non-metallic, low-smoothness, and non-emissive; the hero fill is weaker and farther from the face; the portrait studio uses softened key and rim levels; and the portrait layer is excluded from the world sun. Native character-select preview shows legible facial detail without clipped highlights (docs/evidence/character-lighting-review.png). No full Play checks were run for this visual adjustment.
+
+## Overworld environment review - 22 October 2026
+
+Native Play inspection found trees and grass could intersect the river, riverbank spheres used the brick masonry material and floated at a fixed height, and the basin overlapped the town boulevard. The waterfall rocks also floated above the flat valley floor, while the slate roof tint rendered almost black. Vegetation now excludes river/coast footprints; river rocks use a mossy-rock material and sit at sampled terrain height; water and basin positions align with the valley floor and the basin sits west of the boulevard; waterfall crags are grounded and the cascade meets the pool; and slate roofs use a lighter tint. The updated `EldervaleOverworld` loaded in the native editor preview; the captured runtime view is `docs/evidence/native-game-view.png`. The integrated Play check stopped at its earlier character-portrait assertion after 9 passing checks, before reaching the overworld checks; it does not validate this environment change. The user's normal save remained byte-for-byte unchanged during the isolated review run.
+
+## Bridge and river channel review - 22 October 2026
+
+The river was a water plane laid over near-flat terrain, while the short bridge deck sat above the banks without approaches. The overworld heightmap now carves a recessed riverbed, gradual banks, and shallow basins using the same river path as the water meshes. Terrain heights outside those water footprints retain their previous world levels. The bridge now follows the river crossing, spans from bank to bank, includes solid sloped stone approaches and has abutments embedded below the waterline. Unity 7000.0.0a11 compiled the changes, and a native overworld preview was visually inspected; the capture is `docs/evidence/bridge-review.png`. The full Play suite was not rerun because its current portrait assertion stops before the overworld stage.
+
+## Cape torso clearance - 22 October 2026
+
+The procedural cape had only a shallow stand-off near the shoulder line, so its upper sheet could intersect the torso as the rig posed. Increased the shoulder bow and added clearance to the upper cloth that fades toward the hem. Unity 7000.0.0a11 recompiled the scripts successfully; the full Play suite and a post-change visual capture remain pending.
+
+## Overworld castle silhouette - 22 October 2026
+
+The courtyard approach showed a plain curtain wall and rectangular gate. The runtime-built compound now has crenellated walls, four taller corner turrets, a bannered gatehouse with flanking towers, and a roofed keep rising behind the rear wall. The Warden interaction point sits in front of the keep entrance. Visual Play inspection is pending. The project is configured for Unity 7000.0.0a11; an external `dotnet build` could not compile the Unity project because the .NET Framework 4.7.1 reference assemblies are not installed, and no Play checks were run.
+
+## Run animation alignment - 23 October 2026
+
+The high-speed movement state was playing the jog cycle even though the animation asset includes a dedicated sprint cycle. The Run state now uses `Sprint_Loop` in both the Animator controller and the editor setup that wires animation clips. Play preview is pending; no Play checks were run.
+
+## Character select portrait facing - 23 October 2026
+
+The live portrait preview rotated the avatar 180 degrees away from its camera. Removed the extra half-turn while retaining the slow idle turn. Source reviewed; Unity Play preview remains pending.
+
+## Orin lighting balance - 23 October 2026
+
+Orin's pale base texture clipped under the outdoor key light and left a harsh bright-to-shadow split. His body now uses a muted, matte tint and a modest neutral fill light. Source reviewed; Unity Play preview remains pending.

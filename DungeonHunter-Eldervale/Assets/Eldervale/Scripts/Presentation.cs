@@ -3,7 +3,7 @@ using UnityEngine;
 
 public sealed class Presentation : MonoBehaviour
 {
-    GUIStyle title,heading,body,small,button;
+    GUIStyle title,heading,body,small,button,enemyHealthLabel;
     Texture2D white,glow,menuShade;
     int selected,hover=-1;
     float sliderAt;
@@ -24,6 +24,7 @@ public sealed class Presentation : MonoBehaviour
         title=new GUIStyle{font=Resources.Load<Font>("Fonts/InterDisplay-Light"),fontSize=76,fontStyle=FontStyle.Normal,normal={textColor=new Color(.96f,.96f,.91f)},wordWrap=true};
         heading=new GUIStyle(title){font=Resources.Load<Font>("Fonts/Inter-SemiBold"),fontSize=23};body=new GUIStyle(title){font=font,fontSize=18};
         small=new GUIStyle(body){fontSize=15,normal={textColor=new Color(.76f,.81f,.77f)}};
+        enemyHealthLabel=new GUIStyle(small){fontSize=12,alignment=TextAnchor.MiddleCenter,wordWrap=false,normal={textColor=Color.white}};
         button=new GUIStyle(body){alignment=TextAnchor.MiddleCenter,normal={textColor=Color.white},wordWrap=true};
     }
     void Rect(Rect r,Color c){var old=GUI.color;GUI.color=c;GUI.DrawTexture(r,white);GUI.color=old;}
@@ -161,6 +162,31 @@ public sealed class Presentation : MonoBehaviour
         {
             if(e.Boss&&!e.Dead&&e.Engaged)
             {Text(e.name.ToUpperInvariant(),565,750,800,40,heading);Rect(new Rect(450,797,700,13),Color.black);Rect(new Rect(450,797,700*e.HP/e.MaxHP,13),gold);}
+        }
+        if(f.Screen==GameScreen.Playing)EnemyHealthBars(f);
+    }
+    void EnemyHealthBars(GameFlow f)
+    {
+        var camera=f.Player!=null?f.Player.ViewCamera:null;
+        if(camera==null)return;
+        float scale=Mathf.Min(Screen.width/1600f,Screen.height/900f);
+        float offsetX=(Screen.width-1600*scale)*.5f,offsetY=(Screen.height-900*scale)*.5f;
+        foreach(var e in FindObjectsByType<EnemyAgent>())
+        {
+            if(e==null||e.Dead||e.Civilian||e.Boss||e.Trainer&&!e.Dueling)continue;
+            if(Vector3.Distance(f.Player.transform.position,e.transform.position)>28f)continue;
+            Vector3 anchor=e.transform.position+Vector3.up*2.05f;
+            Vector3 projected=camera.WorldToScreenPoint(anchor);
+            if(projected.z<=0||projected.x<0||projected.x>Screen.width||projected.y<0||projected.y>Screen.height)continue;
+            if(Physics.Linecast(camera.transform.position,anchor,out var hit,1<<0,QueryTriggerInteraction.Ignore)
+                &&hit.transform!=e.transform&&!hit.transform.IsChildOf(e.transform))continue;
+            float x=(projected.x-offsetX)/scale,y=(Screen.height-projected.y-offsetY)/scale;
+            float ratio=Mathf.Clamp01(e.HP/Mathf.Max(1f,e.MaxHP));
+            const float width=92f;
+            Rect(new Rect(x-53,y-35,106,31),new Color(.025f,.035f,.04f,.88f));
+            GUI.Label(new Rect(x-51,y-34,102,17),e.name+"  "+Mathf.CeilToInt(e.HP)+"/"+Mathf.CeilToInt(e.MaxHP),enemyHealthLabel);
+            Rect(new Rect(x-width*.5f-1,y-15,width+2,8),new Color(.05f,.06f,.06f,1f));
+            Rect(new Rect(x-width*.5f,y-14,width*ratio,6),Color.Lerp(new Color(.86f,.19f,.13f),new Color(.38f,.82f,.45f),ratio));
         }
     }
     void Map(GameFlow f)

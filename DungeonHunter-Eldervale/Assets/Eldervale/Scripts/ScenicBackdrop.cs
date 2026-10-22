@@ -152,6 +152,35 @@ public sealed class ScenicBackdrop : MonoBehaviour
     {
         var mesh=new Mesh();mesh.vertices=new[]{new Vector3(-size.x/2,0,-size.y/2),new Vector3(-size.x/2,0,size.y/2),new Vector3(size.x/2,0,size.y/2),new Vector3(size.x/2,0,-size.y/2)};mesh.uv=new[]{Vector2.zero,Vector2.up,Vector2.one,Vector2.right};mesh.triangles=new[]{0,1,2,0,2,3};mesh.RecalculateNormals();var o=MeshObject(parent,name,mesh,material);o.transform.position=p;
     }
+    public static float NaturalBasinRadius(float angle)
+    {
+        return 1f + Mathf.Sin(angle*3f+.35f)*.105f + Mathf.Sin(angle*5f-1.1f)*.045f + Mathf.Sin(angle*8f+2.2f)*.02f;
+    }
+    public static Vector2[] NaturalWaterPlane(Transform parent,string name,Vector3 p,Vector2 size,Material material)
+    {
+        const int segments=64;
+        var vertices=new Vector3[segments+1];
+        var uv=new Vector2[segments+1];
+        var triangles=new int[segments*3];
+        var footprint=new Vector2[segments];
+        vertices[0]=Vector3.zero;uv[0]=new Vector2(.5f,.5f);
+        for(int i=0;i<segments;i++)
+        {
+            float angle=i*Mathf.PI*2f/segments;
+            float radius=NaturalBasinRadius(angle);
+            float x=Mathf.Cos(angle)*size.x*.5f*radius;
+            float z=Mathf.Sin(angle)*size.y*.5f*radius;
+            vertices[i+1]=new Vector3(x,0,z);
+            uv[i+1]=new Vector2(x/size.x+.5f,z/size.y+.5f);
+            footprint[i]=new Vector2(p.x+x,p.z+z);
+            int next=(i+1)%segments+1;
+            int t=i*3;triangles[t]=0;triangles[t+1]=next;triangles[t+2]=i+1;
+        }
+        var mesh=new Mesh{name="Natural basin water mesh"};
+        mesh.vertices=vertices;mesh.uv=uv;mesh.triangles=triangles;mesh.RecalculateNormals();
+        var o=MeshObject(parent,name,mesh,material);o.transform.position=p;
+        return footprint;
+    }
     public static void Crag(Transform parent,Vector3 p,Vector3 size,Material material)
     {
         var o=GameObject.CreatePrimitive(PrimitiveType.Sphere);o.name="Grounded cliff rock";o.transform.SetParent(parent);Destroy(o.GetComponent<Collider>());

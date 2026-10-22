@@ -7,55 +7,11 @@ PASS world emitter is mono for directional playback
 PASS UI cue remains centered 2D
 PASS title background contains real animated waterfall geometry
 PASS bundled Inter typography available, no OS font dependency
-PASS character selection has a live 3D portrait, not only text
-PASS new game loads overworld and live player
-PASS overworld is separate scene
-PASS character selection retained
-PASS actual rigged character mesh
-PASS Humanoid avatar imported
-PASS animation controller wired
-PASS idle and walk clips actually loop
-PASS town population present
-PASS three dungeon gates
-PASS four travel towers
-PASS walkable NavMesh at player spawn
-PASS imported trees retain live materials after scene transition
-PASS tree import axes remain upright and roots touch terrain
-PASS AI sees player inside field of view
-PASS AI cannot see behind its back
-PASS solid cover blocks AI line of sight
-PASS fresh combat memory remains engaged behind cover
-PASS navigation excludes solid pine trunk footprint
-PASS weapon swap releases obsolete native material
-PASS repeated attack restarts actual animation
-PASS Grand Tower heals to full
-PASS kills can advance level by XP
-PASS city level reward claim
-PASS reward cannot be claimed twice
-PASS undiscovered waypoint blocked
-PASS known waypoint starts transition
-PASS duplicate transition blocked
-PASS teleport destination spawn correct
-PASS teleport preserves active character HP
-PASS dungeon scene entered
-PASS map teleport blocked inside dungeon
-PASS dungeon enemy encounter
-PASS enemy receives lethal damage
-PASS dead enemy cannot award XP twice
-PASS enemy drops visible auto-loot
-PASS nearby loot automatically collected
-PASS dungeon exit returns to overworld
-PASS two sigils unlock Sanctum
-PASS boss waits for story introduction
-PASS Guardian invulnerable until introductory dialogue
-PASS approaching Guardian starts dialogue
-PASS finishing dialogue activates Guardian
-PASS Guardian completion recorded
-PASS artifact can be collected after Guardian
-PASS artifact extraction wins expedition
-PASS interaction and transition cues dispatched
-PASS retry revives party at checkpoint
-PASS completed Guardian does not respawn for duplicate rewards
-PASS no runtime errors or exceptions: 
+FAIL character selection has a live 3D portrait, not only text
+System.Exception: FAIL character selection has a live 3D portrait, not only text
+   at EldervalePlayVerification.Check(Boolean value, String label) in D:\New folder\Gim-Cerdas-Tas-Term-5\DungeonHunter-Eldervale\Assets\Eldervale\Editor\EldervalePlayVerification.cs:line 49
+   at EldervalePlayVerification.Step() in D:\New folder\Gim-Cerdas-Tas-Term-5\DungeonHunter-Eldervale\Assets\Eldervale\Editor\EldervalePlayVerification.cs:line 131
 
-59 checks passed; failures=0; result=0
+9 checks passed; failures=0; result=1
+
+Run ended at the character portrait assertion; the overworld stage was not reached.

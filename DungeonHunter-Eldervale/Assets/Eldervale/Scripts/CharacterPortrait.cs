@@ -13,8 +13,9 @@ public sealed class CharacterPortrait:MonoBehaviour
         Texture=new RenderTexture(560,700,24,RenderTextureFormat.ARGB32){name="Live character portrait"};Texture.Create();
         var cameraObject=new GameObject("Portrait camera");cameraObject.transform.SetParent(studio.transform,false);cameraObject.transform.localPosition=new Vector3(0,1.1f,3.25f);cameraObject.transform.LookAt(studio.transform.position+Vector3.up*.95f);
         portraitCamera=cameraObject.AddComponent<Camera>();portraitCamera.clearFlags=CameraClearFlags.SolidColor;portraitCamera.backgroundColor=new Color(.025f,.045f,.04f,0);portraitCamera.fieldOfView=37;portraitCamera.nearClipPlane=.1f;portraitCamera.farClipPlane=10;portraitCamera.cullingMask=1<<29;portraitCamera.targetTexture=Texture;
-        AddLight(new Vector3(-2,3,3),new Color(1,.86f,.68f),12f);
-        AddLight(new Vector3(2,2,-1),new Color(.32f,.77f,.78f),8f);
+        // Keep the close portrait key and rim lights soft so skin highlights retain detail.
+        AddLight(new Vector3(-2,3,3),new Color(1,.86f,.68f),2.8f);
+        AddLight(new Vector3(2,2,-1),new Color(.32f,.77f,.78f),1f);
         var plinth=GameObject.CreatePrimitive(PrimitiveType.Cylinder);plinth.name="Character display plinth";plinth.transform.SetParent(studio.transform,false);plinth.transform.localPosition=new Vector3(0,-.05f,0);plinth.transform.localScale=new Vector3(1.25f,.05f,1.25f);plinth.layer=29;Destroy(plinth.GetComponent<Collider>());
         var stone=RuntimeResources.Own(plinth,new Material(Shader.Find("Universal Render Pipeline/Lit")));stone.color=new Color(.16f,.2f,.19f);stone.SetFloat("_Smoothness",.24f);plinth.GetComponent<Renderer>().sharedMaterial=stone;
     }
