@@ -4,6 +4,7 @@ Kumpulan proyek yang disusun per folder. Isi setiap proyek dan riwayat commit su
 
 ## Daftar proyek
 
+- [DungeonHunter-Eldervale](DungeonHunter-Eldervale/)
 - [DungeonAsoy](DungeonAsoy/)
 - [autonomous-delivery-bot](autonomous-delivery-bot/)
 - [Maze-Runner-Game](Maze-Runner-Game/)
@@ -15,6 +16,10 @@ Kumpulan proyek yang disusun per folder. Isi setiap proyek dan riwayat commit su
 Buka subfolder proyek yang ingin digunakan. Jalankan program atau buka proyek dari direktori tersebut agar jalur aset dan konfigurasi tetap sesuai.
 
 Di Unity Hub, pilih Add project from disk lalu pilih satu subfolder yang berisi `Assets`, `Packages`, dan `ProjectSettings`. Setiap subfolder merupakan proyek terpisah. Repo gabungan ini public sesuai pilihan pemilik.
+
+Untuk project Eldervale, baca `DungeonHunter-Eldervale/AGENTS.md` dan skill
+repo-local `DungeonHunter-Eldervale/.agents/skills/eldervale-unity/SKILL.md`
+sebelum meminta coding agent mengubah atau menjalankan project.
 
 ## Riwayat dan migrasi
 

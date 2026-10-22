@@ -1,0 +1,104 @@
+{
+  "status": "downloaded_sources_selected_subsets_imported",
+  "date": "2026-10-21",
+  "assets": [
+    {
+      "file": "Audio/cynicmusic_battleThemeB.mp3",
+      "bytes": 1584901,
+      "sha256": "8476ce29692d8d317a7d79628af967448ec09d9f66efe692a597336c5cea2629"
+    },
+    {
+      "file": "Audio/kenney_impact-sounds.zip",
+      "bytes": 800850,
+      "sha256": "029d734af1582474edf3a694d1b0cebc97c1c152f2f39fa34d4c2bafc5de77f8",
+      "zip_crc_ok": true
+    },
+    {
+      "file": "Audio/kenney_interface-sounds.zip",
+      "bytes": 834536,
+      "sha256": "f2193d072726d6758a5f7871b2dcc54dcce0d5c35c6f0a62f92549b327c81232",
+      "zip_crc_ok": true
+    },
+    {
+      "file": "Audio/kenney_rpg-audio.zip",
+      "bytes": 964837,
+      "sha256": "6dbeaf8544da958d8f2adcb4a4a4b76c1ade34a05f8ab9edccd327da7375f38b",
+      "zip_crc_ok": true
+    },
+    {
+      "file": "Audio/kmontesdev_akash-chamber.mp3",
+      "bytes": 2662588,
+      "sha256": "89e05dd455e35d3b4306e7efc784e1fd357097dcb1bbc6b42033d6b012459a6d"
+    },
+    {
+      "file": "Audio/kmontesdev_faerie-shrine.mp3",
+      "bytes": 2248389,
+      "sha256": "64681a58ea62e557b71e057d237496bcc36b1c29ef7a2b978549d22268c89717"
+    },
+    {
+      "file": "Audio/kmontesdev_shores-of-yore.mp3",
+      "bytes": 3593802,
+      "sha256": "1cf687f82e2d5a75f7fa9bad8f7fc1c6f3316f178cd9ecf632ddf7530a5d008b"
+    },
+    {
+      "file": "Models/quaternius_animation-library_standard.zip",
+      "bytes": 15904933,
+      "sha256": "cc73fc4e495b82958207316596317a3f40b9fa38065bde1027937452da537724",
+      "zip_crc_ok": true
+    },
+    {
+      "file": "Models/quaternius_universal-base-characters_standard.zip",
+      "bytes": 128968391,
+      "sha256": "fdbf1804c90dfc1ea03e992bff7da2dfd1a79318e13270a660180f9308455f40",
+      "zip_crc_ok": true
+    },
+    {
+      "file": "Models/rgs_modular-dungeon_reference.zip",
+      "bytes": 7070804,
+      "sha256": "713a7e563e0526dcbb67363b740e81a24f1610af6c8c9c1c7f1007385743419c",
+      "zip_crc_ok": true
+    },
+    {
+      "file": "Textures/rocky_terrain/rocky_terrain_ao_1k.jpg",
+      "bytes": 585716,
+      "sha256": "dfa28db589585f799d5904adda6ba394bf998f54cb8be1eef2a822e589cd7e1a"
+    },
+    {
+      "file": "Textures/rocky_terrain/rocky_terrain_diff_1k.jpg",
+      "bytes": 905179,
+      "sha256": "429315865fd89c150272592f6d93def174c6f69804a565ff08e53627a885579b"
+    },
+    {
+      "file": "Textures/rocky_terrain/rocky_terrain_nor_gl_1k.jpg",
+      "bytes": 1059194,
+      "sha256": "a6556e1220c6e6c822e68ceeb9589719e4db8c87340199657cc705fea6ecf391"
+    },
+    {
+      "file": "Textures/rocky_terrain/rocky_terrain_rough_1k.jpg",
+      "bytes": 439748,
+      "sha256": "b37dfff29fff10a219bfe73886940625df63b345289ea6b71ec5f6ddadc8adcb"
+    },
+    {
+      "file": "Textures/stone_brick_wall_001/stone_brick_wall_001_ao_1k.jpg",
+      "bytes": 238753,
+      "sha256": "6c5ce4b3090c011a920a5d55c30799840a193b0c9104d8e935b2cf6397c58abc"
+    },
+    {
+      "file": "Textures/stone_brick_wall_001/stone_brick_wall_001_diff_1k.jpg",
+      "bytes": 259947,
+      "sha256": "15fb31a178401eda2a2b86da539fa39021a08c7a43e902af785f99e18cba6311"
+    },
+    {
+      "file": "Textures/stone_brick_wall_001/stone_brick_wall_001_nor_gl_1k.jpg",
+      "bytes": 355904,
+      "sha256": "7223aa10c71d38f313b63da8493a889208b020824ca691da5066c6c86125cc51"
+    },
+    {
+      "file": "Textures/stone_brick_wall_001/stone_brick_wall_001_rough_1k.jpg",
+      "bytes": 197026,
+      "sha256": "a3c5e22f46d32652a93ed1e4de15e7d307cb338ab96c9fc746cfb1620b7950a7"
+    }
+  ],
+  "voice": "temporary generic macOS speech samples in Assets/Eldervale/Resources/Voice; not human voice recordings",
+  "unavailable": "Fantasy outfit archive exceeded the chosen intake size; not imported"
+}

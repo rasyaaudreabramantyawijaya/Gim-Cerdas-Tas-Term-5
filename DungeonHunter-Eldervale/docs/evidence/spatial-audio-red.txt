@@ -1,0 +1,8 @@
+PASS Frontend opens with main menu
+PASS audio service initialized
+FAIL positional SFX is fully 3D, not partly centered
+System.Exception: FAIL positional SFX is fully 3D, not partly centered
+   at EldervalePlayVerification.Check(Boolean value, String label) in /Users/rasyaaudreabramantyawijaya/Documents/DungeonHunter-Eldervale/Assets/Eldervale/Editor/EldervalePlayVerification.cs:line 44
+   at EldervalePlayVerification.Step() in /Users/rasyaaudreabramantyawijaya/Documents/DungeonHunter-Eldervale/Assets/Eldervale/Editor/EldervalePlayVerification.cs:line 73
+
+2 checks passed; result=1

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="880" viewBox="0 0 1200 880" role="img" aria-labelledby="title desc">
+<title id="title">Eldervale: tiga gerbang dungeon dan empat waypoint</title>
+<desc id="desc">Rancangan peta, bukan gameplay. Ashen Crypt di barat, Whispering Grotto di timur, Veyr Sanctum di utara, Hunter Camp di selatan. Jalan menghubungkan lokasi. Teleport hanya ke waypoint yang sudah diaktifkan saat tidak bertarung.</desc>
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#121f23"/><stop offset="1" stop-color="#172e2b"/></linearGradient>
+ <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M80 0H0V80" fill="none" stroke="#62756f" opacity=".12"/></pattern>
+ <g id="gate"><path d="M-17 20V-8Q0-36 17-8V20" fill="#101b1c" stroke="#e4bd78" stroke-width="5"/><path d="M-9 20V-6Q0-24 9-6V20" fill="#6bc3bd" opacity=".45"/></g>
+ <g id="waypoint"><path d="M0-12L11 0 0 12-11 0Z" fill="#67d3cc" stroke="#d4fff6" stroke-width="2"/><circle r="21" fill="none" stroke="#67d3cc" stroke-width="2" opacity=".4"/></g>
+ <g id="tree"><path d="M0-12L-9 6H9Z M0-4L-12 13H12Z" fill="#3c6357"/><path d="M0 12V19" stroke="#415445" stroke-width="3"/></g>
+ <style>text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;fill:#e5ece6}.muted{fill:#a1b7ac}.name{font-size:23px;font-weight:650}.small{font-size:16px}.tiny{font-size:13px}</style>
+</defs>
+<rect width="1200" height="880" fill="url(#bg)"/><rect x="35" y="122" width="1130" height="626" rx="20" fill="url(#grid)" stroke="#536d62"/>
+<text x="54" y="52" font-size="30" font-weight="650">DUNGEON HUNTER</text><text x="55" y="87" font-size="21" fill="#e4bd78">Eldervale · Relic of Veyr</text>
+<text x="1150" y="48" text-anchor="end" class="small muted">DESIGN PREVIEW · 21 OCT 2026</text><text x="1150" y="78" text-anchor="end" class="small muted">1 overworld kecil · sekitar 200 × 200 m</text>
+<path d="M96 364L150 265 212 318 299 190 383 310 431 253 497 359 554 204 622 143 705 276 742 199 829 330 934 198 1070 328 1114 435" stroke="#3b4d49" stroke-width="38" fill="none" stroke-linejoin="round"/>
+<path d="M116 378L169 289 211 334 301 217 370 320 430 278M565 231L623 172 690 284M849 346L934 223 1045 342" stroke="#778178" opacity=".35" stroke-width="4" fill="none"/>
+<path d="M280 344C203 425 190 526 293 604M958 332C1047 429 1094 538 989 639M429 219C405 326 429 405 475 465" fill="none" stroke="#32584c" stroke-width="40" opacity=".45"/>
+<path d="M584 651C570 565 470 521 403 503S250 466 244 391M583 604C684 541 796 558 919 412M577 556C590 441 627 359 620 283" stroke="#c8a26a" stroke-width="11" fill="none" opacity=".65" stroke-linecap="round"/>
+<path d="M584 651C570 565 470 521 403 503S250 466 244 391M583 604C684 541 796 558 919 412M577 556C590 441 627 359 620 283" stroke="#ecd1a2" stroke-width="2" stroke-dasharray="6 10" fill="none" opacity=".8"/>
+<use href="#tree" x="104" y="476"/><use href="#tree" x="133" y="514"/><use href="#tree" x="146" y="459"/><use href="#tree" x="173" y="550"/><use href="#tree" x="220" y="573"/><use href="#tree" x="303" y="562"/><use href="#tree" x="343" y="597"/><use href="#tree" x="386" y="635"/><use href="#tree" x="447" y="590"/>
+<use href="#tree" x="743" y="654"/><use href="#tree" x="787" y="615"/><use href="#tree" x="830" y="650"/><use href="#tree" x="1009" y="548"/><use href="#tree" x="1089" y="464"/><use href="#tree" x="1057" y="591"/><use href="#tree" x="960" y="650"/><use href="#tree" x="924" y="614"/>
+<use href="#gate" x="241" y="354"/><use href="#waypoint" x="291" y="399"/>
+<rect x="80" y="392" width="185" height="81" rx="8" fill="#102024" stroke="#60776b"/><text x="95" y="421" class="name">Ashen Crypt</text><text x="95" y="447" class="small muted">Melee · Sigil Bara</text>
+<use href="#gate" x="938" y="360"/><use href="#waypoint" x="887" y="411"/>
+<rect x="917" y="402" width="220" height="83" rx="8" fill="#102024" stroke="#60776b"/><text x="932" y="432" class="name">Whispering Grotto</text><text x="932" y="458" class="small muted">Ranged · Sigil Kabut</text>
+<use href="#gate" x="622" y="236"/><use href="#waypoint" x="621" y="299"/>
+<rect x="678" y="254" width="237" height="82" rx="8" fill="#102024" stroke="#e4bd78"/><text x="693" y="284" class="name">Veyr Sanctum</text><text x="693" y="311" class="small muted">2 sigil → Guardian + Relic</text>
+<path d="M555 667L582 633 609 667Z" fill="#725344" stroke="#ddb783" stroke-width="2"/><path d="M582 650V667" stroke="#e5c28b" stroke-width="3"/><use href="#waypoint" x="636" y="663"/>
+<text x="515" y="705" class="name">Hunter Camp</text><text x="493" y="731" class="small muted">Spawn · NPC · extraction</text>
+<path d="M1092 215V158M1080 174L1092 153 1104 174" stroke="#dce8dd" fill="none" stroke-width="3"/><text x="1092" y="144" text-anchor="middle" class="small">N</text>
+<use href="#gate" x="68" y="797"/><text x="104" y="802" class="small">Gerbang dungeon</text><use href="#waypoint" x="317" y="795"/><text x="350" y="802" class="small">Waypoint, aktifkan dulu</text>
+<path d="M628 795H691" stroke="#c8a26a" stroke-width="5"/><text x="711" y="802" class="small">Jalur eksplorasi</text>
+<text x="54" y="852" class="small muted">M: buka peta · teleport di luar combat · loading saat masuk/keluar dungeon</text>
+</svg>

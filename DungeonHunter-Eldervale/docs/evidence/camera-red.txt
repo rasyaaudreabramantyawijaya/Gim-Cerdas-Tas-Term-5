@@ -1,0 +1,3 @@
+21 October 2026 — EldervaleVerification.Rules in the live editor
+FAIL: CameraPitch implementation exists
+Missing pure camera pitch rule. Regression cases require invert to affect input delta only, keep stationary pitch unchanged, and clamp elevation.

@@ -1,0 +1,12 @@
+PASS Frontend opens with main menu
+PASS audio service initialized
+PASS positional SFX is fully 3D, not partly centered
+PASS generated SFX uses 48 kHz audio
+PASS world emitter is mono for directional playback
+PASS UI cue remains centered 2D
+FAIL title background contains real animated waterfall geometry
+System.Exception: FAIL title background contains real animated waterfall geometry
+   at EldervalePlayVerification.Check(Boolean value, String label) in /Users/rasyaaudreabramantyawijaya/Documents/DungeonHunter-Eldervale/Assets/Eldervale/Editor/EldervalePlayVerification.cs:line 45
+   at EldervalePlayVerification.Step() in /Users/rasyaaudreabramantyawijaya/Documents/DungeonHunter-Eldervale/Assets/Eldervale/Editor/EldervalePlayVerification.cs:line 80
+
+6 checks passed; result=1

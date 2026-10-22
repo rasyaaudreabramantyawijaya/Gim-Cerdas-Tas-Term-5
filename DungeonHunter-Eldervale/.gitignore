@@ -1,0 +1,36 @@
+# Unity-generated data; regenerate locally in Unity Hub.
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# IDE and operating-system files.
+.DS_Store
+.vs/
+.idea/
+*.csproj
+*.sln
+*.slnx
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Downloaded source archives are documented by the intake manifest;
+# imported, required assets live under Assets/.
+AssetStaging/**/*.zip
+AssetStaging/**/*.7z
+AssetStaging/**/*.tar
+AssetStaging/**/*.tar.gz
+
+# Large transient editor/session logs are not required to open the project.
+docs/**/*.log

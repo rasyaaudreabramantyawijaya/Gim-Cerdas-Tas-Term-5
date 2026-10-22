@@ -1,0 +1,30 @@
+PASS Frontend opens with main menu
+PASS audio service initialized
+PASS positional SFX is fully 3D, not partly centered
+PASS generated SFX uses 48 kHz audio
+PASS world emitter is mono for directional playback
+PASS UI cue remains centered 2D
+PASS new game loads overworld and live player
+PASS overworld is separate scene
+PASS character selection retained
+PASS actual rigged character mesh
+PASS Humanoid avatar imported
+PASS animation controller wired
+PASS town population present
+PASS three dungeon gates
+PASS four travel towers
+PASS walkable NavMesh at player spawn
+PASS Grand Tower heals to full
+PASS kills can advance level by XP
+PASS city level reward claim
+PASS reward cannot be claimed twice
+PASS undiscovered waypoint blocked
+PASS known waypoint starts transition
+PASS duplicate transition blocked
+PASS teleport destination spawn correct
+FAIL teleport preserves active character HP
+System.Exception: FAIL teleport preserves active character HP
+   at EldervalePlayVerification.Check(Boolean value, String label) in /Users/rasyaaudreabramantyawijaya/Documents/DungeonHunter-Eldervale/Assets/Eldervale/Editor/EldervalePlayVerification.cs:line 45
+   at EldervalePlayVerification.Step() in /Users/rasyaaudreabramantyawijaya/Documents/DungeonHunter-Eldervale/Assets/Eldervale/Editor/EldervalePlayVerification.cs:line 111
+
+24 checks passed; result=1

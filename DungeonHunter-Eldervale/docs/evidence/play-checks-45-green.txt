@@ -1,0 +1,47 @@
+PASS Frontend opens with main menu
+PASS audio service initialized
+PASS positional SFX is fully 3D, not partly centered
+PASS generated SFX uses 48 kHz audio
+PASS world emitter is mono for directional playback
+PASS UI cue remains centered 2D
+PASS title background contains real animated waterfall geometry
+PASS bundled Inter typography available, no OS font dependency
+PASS new game loads overworld and live player
+PASS overworld is separate scene
+PASS character selection retained
+PASS actual rigged character mesh
+PASS Humanoid avatar imported
+PASS animation controller wired
+PASS town population present
+PASS three dungeon gates
+PASS four travel towers
+PASS walkable NavMesh at player spawn
+PASS Grand Tower heals to full
+PASS kills can advance level by XP
+PASS city level reward claim
+PASS reward cannot be claimed twice
+PASS undiscovered waypoint blocked
+PASS known waypoint starts transition
+PASS duplicate transition blocked
+PASS teleport destination spawn correct
+PASS teleport preserves active character HP
+PASS dungeon scene entered
+PASS map teleport blocked inside dungeon
+PASS dungeon enemy encounter
+PASS enemy receives lethal damage
+PASS dead enemy cannot award XP twice
+PASS enemy drops visible auto-loot
+PASS nearby loot automatically collected
+PASS dungeon exit returns to overworld
+PASS two sigils unlock Sanctum
+PASS boss waits for story introduction
+PASS approaching Guardian starts dialogue
+PASS finishing dialogue activates Guardian
+PASS Guardian completion recorded
+PASS artifact can be collected after Guardian
+PASS artifact extraction wins expedition
+PASS interaction and transition cues dispatched
+PASS retry revives party at checkpoint
+PASS no runtime errors or exceptions: 
+
+45 checks passed; result=0

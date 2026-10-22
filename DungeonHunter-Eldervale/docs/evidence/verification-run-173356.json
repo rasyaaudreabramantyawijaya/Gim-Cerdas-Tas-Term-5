@@ -1,0 +1,32 @@
+{
+    "version": 1,
+    "character": 1,
+    "weapon": 0,
+    "upgrade": 0,
+    "coins": 150,
+    "potions": 3,
+    "checkpoint": 3,
+    "xp": 290,
+    "level": 2,
+    "claimedLevel": 2,
+    "party": [
+        1,
+        2,
+        0
+    ],
+    "health": [
+        100.0,
+        100.0,
+        100.0
+    ],
+    "sigilA": true,
+    "sigilB": true,
+    "guardian": true,
+    "artifact": true,
+    "waypoints": [
+        true,
+        true,
+        false,
+        false
+    ]
+}
